@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<link href='https://fonts.googleapis.com/css?family=Montserrat Alternates' rel='stylesheet'>
+<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JabkaDev - Главная</title>
+    <style>
+        * {
+            margin: 0;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Montserrat Alternates';
+            background-color: #252525;
+        }
+
+
+        li {
+            list-style-type: none;
+        }
+
+
+        hr {
+            margin: 0;
+        }
+
+        a {
+            border-radius: 20px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .profile-pic {
+            width: 100%;
+        }
+
+        /* стили для мобильных устройств */
+        @media only screen and (max-width: 600px) {
+            /* заголовок и навигация */
+            header {
+                background-color: black;
+                padding: 10px;
+                text-align: center;
+            }
+
+            h1 {
+                color: black;
+                font-size: 28px;
+                margin: 0;
+            }
+
+            nav ul {
+                display: none;
+            }
+
+            nav.open ul {
+                display: block;
+                margin: 0;
+                padding: 0;
+                text-align: center;
+            }
+
+            nav.open li {
+                display: block;
+                padding: 10px;
+                border-bottom: 1px solid #fff;
+            }
+
+            nav.open li:last-child {
+                border-bottom: none;
+            }
+
+            nav a {
+                color: #fff;
+                font-size: 20px;
+                text-decoration: none;
+                display: block;
+            }
+
+            /* секции */
+            section {
+                padding: 20px;
+            }
+
+            .profile-pic {
+                display: none
+            }
+
+            h2 {
+                font-size: 24px;
+                margin: 0 0 10px;
+            }
+
+            ul {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
+
+            li {
+                font-size: 18px;
+                line-height: 1.5;
+                margin-bottom: 10px;
+                padding-left: 20px;
+                position: relative;
+            }
+
+            li:before {
+                content: "•";
+                color: #8e8e8e;
+                font-size: 12px;
+                left: 0;
+                position: absolute;
+                top: 6px;
+            }
+        }
+
+        /* стили для планшетов */
+        @media only screen and (min-width: 601px) and (max-width: 960px) {
+            /* заголовок и навигация */
+            header {
+                padding: 20px;
+                background-color: yellow;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            nav ul {
+                display: block;
+                margin: 0;
+                padding: 0;
+                text-align: center;
+            }
+
+            nav li {
+                display: inline-block;
+                padding: 10px 20px;
+                border-bottom: none;
+
+            }
+
+            /* секции */
+            section {
+                padding: 40px;
+                width: 100%;
+
+            }
+
+            .profile-pic {
+                display: none
+            }
+
+            h2 {
+                font-size: 36px;
+            }
+
+            li {
+                font-size: 24px;
+                line-height: 1.5;
+                margin-bottom: 20px;
+                padding-left: 30px;
+                position: relative;
+            }
+
+            li:before {
+                font-size: 18px;
+                top: 8px;
+            }
+        }
+
+        /* стили для настольных компьютеров */
+        @media only screen and (min-width: 961px) {
+            /* заголовок и навигация */
+            header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 10px 50px;
+                background: black;
+            }
+
+            .container {
+                /* max-width: 1020px; */
+                /* width: 80%; */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+
+                /* border: black; */
+                box-shadow: black;
+                /* border-radius: 20px; */
+                /* justify-content: flex-start; */
+                height: 90vh;
+
+            }
+
+            main {
+                display: inline-flex;
+                background-color: #252525;
+            }
+
+            h1 {
+                font-size: 48px;
+            }
+
+            h3 {
+                margin-top: 20px;
+                font-family: 'Montserrat';
+                font-size: 30px;
+                font-weight: normal;
+                width: 50%;
+            }
+
+            nav ul {
+                display: flex;
+                align-items: center;
+            }
+
+            nav li {
+                border-bottom: none;
+                margin-right: 100px;
+            }
+
+            nav a {
+                font-size: 20px;
+                padding: 10px 20px;
+                border-radius: 20px;
+                color: #fff;
+                background-color: #252525;
+                text-decoration: none;
+            }
+
+            nav a:hover {
+                background-color: #555;
+            }
+
+            /* секции */
+            section {
+                width: 100%;
+                background-color: #252525;
+            }
+
+            h2 {
+                font-size: 48px;
+            }
+
+            li {
+                font-size: 40px;
+                margin-bottom: 30px;
+
+            }
+
+            li:before {
+                font-size: 24px;
+                top: 10px;
+            }
+
+            /* подвал */
+            footer {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                background-color: black;
+                color: #fff;
+                text-align: center;
+                padding: 15px;
+            }
+
+
+            main {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                border-radius: 10px;
+                background: #222222;
+            }
+
+            .hr2 {
+                margin-top: 0;
+                margin-bottom: 20px;
+                width: 1080px;
+                /* color: yellow; */
+                border-top: 4px solid yellow;
+
+            }
+
+            .describe {
+                display: inline-flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 30%;
+                margin-top: 20px;
+                margin-right: 20px;
+                box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+                border-radius: 10px;
+                background: white;
+                margin-bottom: 20px;
+
+            }
+
+            .describe-first {
+                display: inline-flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 30%;
+                box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+                border-radius: 10px;
+                background: white;
+                margin: 20px 20px 20px 50px;
+
+            }
+
+            .describe-form {
+                display: flow-root;
+            }
+
+            .h2-des {
+                font-size: 30px;
+                font-weight: bold;
+            }
+
+            .h2-des-first {
+                margin-top: 15px;
+                font-size: 30px;
+                font-weight: bold;
+            }
+
+            .h2-des-last {
+
+                font-weight: bold;
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+
+            .hr3 {
+                margin-top: 5px;
+                margin-bottom: 20px;
+                width: 80%;
+                /* color: yellow; */
+                border-top: 4px solid yellow;
+            }
+
+            .describe-text-form {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .describe-text {
+                display: inline-flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+                width: 30%;
+                margin-top: 20px;
+                margin-right: 20px;
+                font-size: 15px;
+
+
+            }
+
+            .describe-text-first {
+                display: inline-flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+                width: 30%;
+                margin-top: 20px;
+                margin-right: 20px;
+                margin-left: 40px;
+                font-size: 15px;
+
+
+            }
+
+            .describe-text li {
+                font-size: 15px;
+                list-style-type: disc;
+                margin: 0;
+            }
+
+            .describe-text-first li {
+                font-size: 15px;
+                list-style-type: disc;
+                margin: 0;
+            }
+
+            .a-class {
+                display: inline-flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                border-radius: 20px;
+                color: #000;
+            }
+
+            .a-class a {
+                text-decoration: none;
+                background: none;
+            }
+
+
+            .title-back {
+                background: black;
+                color: white;
+                padding: 20px 40px;
+                margin-left: 110px;
+            }
+
+            header {
+                padding: 0;
+            }
+
+            .first-block {
+                display: flex;
+                color: white;
+                background-image: url("back.png");
+                background-color: black;
+                background-size: cover;
+                background-repeat: no-repeat;
+                height: 65vh;
+
+            }
+
+            .second-block {
+                display: flow-root;
+                color: white;
+                height: 90vh;
+
+            }
+
+            .third-block {
+                display: flow-root;
+                color: white;
+                height: 60vh;
+            }
+
+            input[type="button"] {
+                color: #fff;
+                background-color: #252525;
+                cursor: pointer;
+                margin-top: 20px;
+                text-decoration: none;
+                list-style-type: none;
+                /* font-weight: bold;*/
+
+                border: 1px solid #252525;
+                border-radius: 20px;
+                font-size: 16px;
+                padding: 10px 75px;
+                width: 100%;
+            }
+
+            input[type="text"], input[type="email"], input[type="submit"], input[type="file"], input[type="button"], textarea {
+                border-radius: 5px;
+                border: 1px solid #000000;
+                font-size: 16px;
+                padding: 10px;
+                width: 100%;
+            }
+
+            input[type="button"] {
+                background-color: yellow;
+                color: #000;
+                cursor: pointer;
+                margin-top: 20px;
+            }
+
+            .title-link {
+                display: flow-root;
+                margin: 70px 150px;
+            }
+
+            .title-link-message {
+                display: flow-root;
+                margin: 40px 0 40px 40px;
+            }
+
+            .a {
+                display: inline-flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                border-radius: 20px;
+                color: #000;
+            }
+
+            .a input[type="button"] {
+                color: #fff;
+                background-color: #333652;
+                cursor: pointer;
+                margin-top: 20px;
+                text-decoration: none;
+                list-style-type: none;
+                /* font-weight: bold;*/
+
+                border: 1px solid #333652;
+                border-radius: 20px;
+                font-size: 16px;
+                padding: 10px 75px;
+                width: 100%;
+            }
+
+            .title-form {
+                font-family: 'Oswald';
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-weight: lighter;
+            }
+
+            .phone-pic {
+                display: flex;
+                width: 100%;
+            }
+
+            .blog-container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: 5%;
+            }
+
+            .blog-container-pic {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-left: 10%;
+                width: 100%;
+            }
+
+            .form-message {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-left: 10%;
+                width: 30%;
+            }
+
+            .footer-pic {
+                margin-left: 25%;
+            }
+
+            .footer-txt {
+                font-size: 20px;
+                margin-left: 10%;
+            }
+
+        }
+
+
+    </style>
+</head>
+<body>
+<header>
+
+    <div class="title-back"><h1>JabkaDev</h1></div>
+
+    <nav>
+        <ul>
+            <li><a th:href="@{/login}">Войти</a></li>
+        </ul>
+    </nav>
+</header>
+<div class="first-block">
+    <!-- <img th:src="@{../../playground_assets/back.png}"
+          src="../playground_assets/back.png"
+          class="profile-pic">-->
+    <div class="title-link">
+        <h1>Java Developer</h1>
+        <h3>Hi! My name is Ivan Mokhovikov! This site about me and programming!</h3>
+        <a class="a" th:href="@{/blog}"><input type="button" value="Blog"></a>
+    </div>
+
+
+</div>
+
+<div class="container">
+
+
+    <main>
+
+        <section>
+            <div class="title-form">
+                <h2 class="title-form-text">My projects</h2>
+            </div>
+
+            <hr>
+
+            <div class="describe-form">
+                <div class="describe-first">
+                    <h2 class="h2-des-first">Начинающий</h2>
+                    <hr class="hr3">
+                    <h2 class="h2-des">65</h2>
+                    <h2 class="h2-des">р/мес.</h2>
+                    <h3 class="h2-des-last">4 посещения</h3>
+                </div>
+                <div class="describe">
+                    <h2 class="h2-des-first">Продвинутый</h2>
+                    <hr class="hr3">
+                    <h2 class="h2-des">85</h2>
+                    <h2 class="h2-des">р/мес.</h2>
+                    <h3 class="h2-des-last">8 посещения</h3>
+                </div>
+                <div class="describe">
+                    <h2 class="h2-des-first">Профи</h2>
+                    <hr class="hr3">
+                    <h2 class="h2-des">105</h2>
+                    <h2 class="h2-des">р/мес.</h2>
+                    <h3 class="h2-des-last">12 посещения</h3>
+                </div>
+
+                <div class="describe-first">
+                    <h2 class="h2-des-first">Начинающий</h2>
+                    <hr class="hr3">
+                    <h2 class="h2-des">65</h2>
+                    <h2 class="h2-des">р/мес.</h2>
+                    <h3 class="h2-des-last">4 посещения</h3>
+                </div>
+                <div class="describe">
+                    <h2 class="h2-des-first">Продвинутый</h2>
+                    <hr class="hr3">
+                    <h2 class="h2-des">85</h2>
+                    <h2 class="h2-des">р/мес.</h2>
+                    <h3 class="h2-des-last">8 посещения</h3>
+                </div>
+                <div class="describe">
+                    <h2 class="h2-des-first">Профи</h2>
+                    <hr class="hr3">
+                    <h2 class="h2-des">105</h2>
+                    <h2 class="h2-des">р/мес.</h2>
+                    <h3 class="h2-des-last">12 посещения</h3>
+                </div>
+            </div>
+
+
+        </section>
+    </main>
+</div>
+
+<div class="second-block">
+
+
+    <div class="title-form">
+        <h2 class="title-form-text">Mobile Development</h2>
+    </div>
+
+    <hr>
+
+    <div class="blog-container">
+        <div class="blog-container-pic">
+            <img th:src="@{../../playground_assets/phone.png}" src="phone.png" class="phone-pic">
+        </div>
+
+        <div class="title-link">
+
+            <h1 style="font-family: Oswald; width: 100%; font-size: 40px">Mobile Development Blog</h1>
+            <h3 style=" width: 100%;">I started to study mobile development. In this blog I talk about my way, successes
+                and other</h3>
+            <a class="a" th:href="@{/blog}"><input type="button" value="Blog"></a>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="third-block">
+
+    <hr>
+
+    <div class="blog-container">
+        <!-- <div class="blog-container-pic">
+             <img th:src="@{../../playground_assets/phone.png}" src="../playground_assets/phone.png" class="phone-pic">
+         </div>
+ -->
+        <div class="title-link-message">
+            <h1 style="font-family: Oswald; width: 100%; font-size: 40px">Contact JabkaDev</h1>
+            <h3 style=" width: 100%;">Get in touch with me, if you have a question</h3>
+        </div>
+
+        <div class="form-message">
+            <form>
+                <label for="firstname">Имя:</label>
+                <input type="text" id="firstname" name="lastname" placeholder="Имя:">
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Email:">
+
+                <label for="message">Сообщение:</label>
+                <textarea id="message" name="message" placeholder="Enter your phone number">
+
+                </textarea>
+                <a class="a" th:href="@{/blog}"><input type="button" value="Send"></a>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+</body>
+<div id="sm-wrapper">
+    <footer>
+        <p class="footer-txt">© JabkaDev, 2023</p>
+        <img th:src="@{jabka.png}" src="jabka.png" class="footer-pic">
+
+    </footer>
+</div>
+</html>
+<script>
+    (function () {
+        var ws = new WebSocket('ws://' + window.location.host +
+            '/jb-server-page?reloadMode=RELOAD_ON_SAVE&' +
+            'referrer=' + encodeURIComponent(window.location.pathname));
+        ws.onmessage = function (msg) {
+            if (msg.data === 'reload') {
+                window.location.reload();
+            }
+            if (msg.data.startsWith('update-css ')) {
+                var messageId = msg.data.substring(11);
+                var links = document.getElementsByTagName('link');
+                for (var i = 0; i < links.length; i++) {
+                    var link = links[i];
+                    if (link.rel !== 'stylesheet') continue;
+                    var clonedLink = link.cloneNode(true);
+                    var newHref = link.href.replace(/(&|\?)jbUpdateLinksId=\d+/, "$1jbUpdateLinksId=" + messageId);
+                    if (newHref !== link.href) {
+                        clonedLink.href = newHref;
+                    } else {
+                        var indexOfQuest = newHref.indexOf('?');
+                        if (indexOfQuest >= 0) {
+                            // to support ?foo#hash
+                            clonedLink.href = newHref.substring(0, indexOfQuest + 1) + 'jbUpdateLinksId=' + messageId + '&' +
+                                newHref.substring(indexOfQuest + 1);
+                        } else {
+                            clonedLink.href += '?' + 'jbUpdateLinksId=' + messageId;
+                        }
+                    }
+                    link.replaceWith(clonedLink);
+                }
+            }
+        };
+    })();
+</script>

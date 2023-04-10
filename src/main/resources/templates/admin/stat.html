@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:each="age:${AverageAge}">
+    <h2 th:text="${ 'Средний возраст для статьи: ' + age.key +  ': ' + age.value}"></h2>
+</div>
+
+<hr>
+
+<div th:each="man:${amountMan}">
+    <h2 th:text="${'Кол-во мужчин для статьи: ' + man.key + ': ' + man.value}"></h2>
+</div>
+
+<hr>
+
+<div th:each="women:${amountWomen}">
+    <h2 th:text="${'Кол-во женщин для статьи: ' + women.key + ': ' + women.value}"></h2>
+</div>
+
+</body>
+</html>

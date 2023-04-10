@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/blog
+    username: root
+    password: 12345678
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 684209329487-af6atp5lg4sel7rdd9frq1rbap3c9cku.apps.googleusercontent.com
+            clientSecret: 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
+            scope:
+              - email
+              - profile

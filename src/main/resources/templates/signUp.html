@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Registration</title>
+    <style>
+        /* Общие стили */
+        * {
+            box-sizing: border-box;
+            font-family: 'Oswald';
+        }
+
+        body {
+            margin: 0;
+            background: linear-gradient(294.15deg, #202020 0%, #202020 55.14%, rgba(32, 32, 32, 0.92) 78.3%, rgba(32, 32, 32, 0.72) 96.49%);
+
+        }
+
+        /* Секция формы */
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 91vh;
+            background: linear-gradient(294.15deg, #202020 0%, #202020 55.14%, rgba(32, 32, 32, 0.92) 78.3%, rgba(32, 32, 32, 0.72) 96.49%);
+
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 80%;
+            max-width: 400px;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"], input[type="email"], input[type="password"] {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        input[type="submit"]:hover {
+            background-color: white;
+            color: black;
+            border: 3px black solid;
+        }
+
+        /* Секция заголовка */
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60px;
+            background-color: black;
+            color: white;
+
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+            padding: 0;
+        }
+
+        a {
+            color: white;
+            margin-top: 10px;
+        }
+
+        /* Стили для настольных компьютеров */
+        @media screen and (min-width: 1024px) {
+            .form-container {
+                padding: 80px;
+            }
+
+            input[type="text"], input[type="email"], input[type="password"], input[type="submit"] {
+                font-size: 18px;
+            }
+
+            .header h1 {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <h1>Регистрация</h1>
+</header>
+<section class="form-container">
+    <form th:action="@{/signUp}" method="post">
+        <label for="firstname">Имя:</label>
+        <input type="text" id="firstname" name="firstname" placeholder="Имя">
+
+        <label for="lastname">Фамилия:</label>
+        <input type="text" id="lastname" name="lastname" placeholder="Фамилия">
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Email">
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password">
+
+        <input type="submit" value="Зарегистрироваться">
+    </form>
+    <a th:href="@{/login}">Войти</a>
+</section>
+</body>
+</html>
