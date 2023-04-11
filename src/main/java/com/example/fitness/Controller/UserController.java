@@ -1,6 +1,7 @@
 package com.example.fitness.Controller;
 
 
+import com.example.fitness.Entity.Provider;
 import com.example.fitness.Entity.User;
 import com.example.fitness.OAuth2.CustomOAuth2User;
 import com.example.fitness.UserService.UserServiceImpl;
@@ -34,31 +35,48 @@ public class UserController {
         org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         email = auth.getName();
         User user = userService.getMemberByEmail(email);
-        user.setFirstname(firstname);
-        user.setLastname(lastname);
-        user.setNumber(phone);
 
 
-        userService.update(user);
 
-        model.addAttribute("user", user);
-        return "redirect:/user/personal";
+        if(user==null){
+            CustomOAuth2User oauthUser = (CustomOAuth2User) auth.getPrincipal();
+            User user1 = userService.getMemberByEmail(oauthUser.getEmail());
+            model.addAttribute("user", user1);
+            user1.setFirstname(firstname);
+            user1.setLastname(lastname);
+            user1.setNumber(phone);
+            userService.update(user1);
+            return "redirect:/user/google/personal";
+        }else {
+
+            user.setFirstname(firstname);
+            user.setLastname(lastname);
+            user.setNumber(phone);
+
+            userService.update(user);
+            model.addAttribute("user", user);
+            return "redirect:/user/personal";
+        }
+
     }
 
     @GetMapping("/personal")
-    public String personal(Model model, Authentication auth, String email) {
-
-        auth = SecurityContextHolder.getContext().getAuthentication();
-        email = auth.getName();
-
-     /*   CustomOAuth2User oauthUser = (CustomOAuth2User) auth.getPrincipal();
-        User user = userService.getMemberByEmail(oauthUser.getEmail());*/
+    public String personal(Model model){
+        org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
         User user = userService.getMemberByEmail(email);
-        model.addAttribute("user", user);
 
-        model.addAttribute("email", email);
-        return "user/personal";
+        if(user.getRoles().toString().equals("[ADMIN]")){
+            model.addAttribute("user", user);
+            return "redirect:/admin/personal";
+        } else if (user.getRoles().toString().equals("[USER]")) {
+            model.addAttribute("user", user);
+            return "redirect:/user/personal";
+        }
+        return null;
     }
+
+
 
     @GetMapping("/google/personal")
     public String googlePersonal(Authentication auth, Model model){

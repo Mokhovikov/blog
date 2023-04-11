@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,8 +43,8 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/login", "/signUp", "/", "/blog","/blog/{id}", "/search").permitAll()
-                .antMatchers("/user/**").hasAuthority("USER")
+                .antMatchers("/login", "/signUp", "/", "/blog", "/search").permitAll()
+                .antMatchers("/user/**", "/blog/{id}").hasAuthority("USER")
                 .antMatchers("/user/**", "/blog/{id}").authenticated()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 //.anyRequest().authenticated()
@@ -118,6 +119,9 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
                 })
 
                 //.defaultSuccessUrl("/list")
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 .and()
                 .logout().logoutUrl("/logout")
                 .and()

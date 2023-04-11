@@ -32,6 +32,7 @@
 
         hr {
             margin: 0;
+            width: 100%;
         }
 
         a {
@@ -249,7 +250,10 @@
 
             /* секции */
             section {
+                display: flex;
                 width: 100%;
+                justify-content: center;
+                align-items: center;
                 background-color: #252525;
             }
 
@@ -285,7 +289,7 @@
                 align-items: center;
                 justify-content: center;
                 width: 100%;
-                border-radius: 10px;
+                /* border-radius: 10px; */
                 background: #222222;
             }
 
@@ -294,7 +298,7 @@
                 margin-bottom: 20px;
                 width: 1080px;
                 /* color: yellow; */
-                border-top: 4px solid yellow;
+                border-top: 4px solid #252525;
 
             }
 
@@ -322,9 +326,29 @@
                 box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
                 border-radius: 10px;
                 background: white;
-                margin: 20px 20px 20px 50px;
+                margin: 20px auto;
 
             }
+
+            .describe-link{
+                display: inline-flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 30%;
+                box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+                border-radius: 10px;
+                background: #cccccc;
+                margin: 20px auto;
+                opacity: 0;
+                color: black;
+            }
+
+            .describe-form:hover{
+                background: #cccccc;
+            }
+
+
 
             .describe-form {
                 display: contents;
@@ -333,10 +357,11 @@
             .h2-des {
                 font-size: 30px;
                 font-weight: bold;
+                margin-bottom: 35px;
             }
 
             .h2-des-first {
-                margin-top: 15px;
+                margin-top: 45px;
                 font-size: 30px;
                 font-weight: bold;
             }
@@ -351,9 +376,9 @@
             .hr3 {
                 margin-top: 5px;
                 margin-bottom: 20px;
-                width: 80%;
                 /* color: yellow; */
-                border-top: 4px solid yellow;
+                border-top: 4px solid #252525;
+                width: 100%;
             }
 
             .describe-text-form {
@@ -388,6 +413,8 @@
 
 
             }
+
+
 
             .describe-text li {
                 font-size: 15px;
@@ -620,25 +647,30 @@
 
 <div class="container">
 
+    <div class="title-form">
+        <h2 class="title-form-text">Мои проекты</h2>
+    </div>
+
+    <hr>
 
     <main>
 
         <section>
-            <div class="title-form">
-                <h2 class="title-form-text">Мои проекты</h2>
-            </div>
 
-            <hr>
 
             <div class="describe-form" th:each="project:${projects}">
                <!-- <div th:if="${project.getId()==1||project.getId()%3==0}">-->
+
                     <div class="describe-first">
+                        <a th:href="@{${project.getLink()}}" style="color: black; text-align: center">
                         <!--Имя-->
                         <h2 class="h2-des-first" th:text="${project.getName()}"></h2>
                         <hr class="hr3">
                         <!--Язык-->
                         <h2 class="h2-des" th:text="${project.getLanguage()}"></h2>
+                        </a>
                     </div>
+
                <!-- </div>-->
             <!--    <div th:unless="${project.getId()==1||project.getId()%3==0}">
                     <div class="describe" >
@@ -696,18 +728,20 @@
         </div>
 
         <div class="form-message">
-            <form>
+            <form th:action="@{/sendMessage}" method="post">
+
                 <label for="firstname">Имя:</label>
-                <input type="text" id="firstname" name="lastname" placeholder="Имя:">
+                <input type="text" id="firstname" name="name" placeholder="Имя:" required>
 
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="Email:">
+                <input type="email" id="email" name="email" placeholder="Email:" required>
 
                 <label for="message">Сообщение:</label>
-                <textarea id="message" name="message" placeholder="Enter your phone number">
-
+                <textarea id="message" name="message" placeholder="Enter your phone number" required>
                 </textarea>
-                <a class="a" th:href="@{/blog}"><input type="button" value="Send"></a>
+
+
+                <input type="submit" value="Send">
             </form>
         </div>
     </div>
