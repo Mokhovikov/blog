@@ -7,6 +7,7 @@ import com.example.fitness.Repository.*;
 import com.example.fitness.UserService.BlogService;
 import com.example.fitness.UserService.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -49,17 +50,46 @@ public class Controller {
             @RequestParam String firstname,
             @RequestParam String lastname,
             @RequestParam String email,
-            @RequestParam String password) {
+            @RequestParam String password,
+            @RequestParam int age, @RequestParam String sex, Model model) {
 
-        User user = new User(firstname, lastname, email, password);
-        userService.createUser(user);
+        if(userRepository.existsById(email)){
+            model.addAttribute("error", "Пользователь с таким email существует");
+
+            return "signUp";
+        }else{
+            if(email.matches("r\"[^@]+@gmail\\.com$")||email.matches("r\"[^@]+@mail\\.ru$")
+                    ||email.matches("r\"[^@]+@yandex\\.ru$")){
+                User user = new User(firstname, lastname, email, password, age,sex);
+                userService.createUser(user);
+                return "redirect:/login";
+            }else{
+                model.addAttribute("valid","Некорректный email. Должно содержать @gmail.com, @mail.ru, @yandex.ru");
+                return "signUp";
+            }
 
 
-        return "redirect:/login";
+
+
+
+        }
     }
 
     @RequestMapping(path = {"/blog", "/search"})
-    public String blog(Model model, String keyword) {
+    public String blog(Model model, String keyword, Authentication auth) {
+
+        auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        System.out.println("email: " + email);
+
+            User user = userService.getMemberByEmail(email);
+            int visit = user.getVisit();
+            visit++;
+            user.setVisit(visit);
+            userRepository.save(user);
+
+
+
 
         if (blogRepository.findAll().isEmpty()) {
 
@@ -126,24 +156,6 @@ public class Controller {
     }
 
 
-    @PostMapping("/loading")
-    public String loginMember(
-            @RequestParam String email
-
-    ){
-        org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        email = auth.getName();
-        System.out.println(auth.getAuthorities());
-
-        System.out.println("Personal " + email);
-        User user = userRepository.getUserByEmail(email);
-        if(!user.isEnabled()){
-            return "redirect:/personal";
-        }else {
-            return "redirect:/block";
-        }
-
-    }
 
 
     @GetMapping("/block")
@@ -152,25 +164,7 @@ public class Controller {
     }
 
 
-/*    @GetMapping("/user/**")
-    public String user(String email) {
 
-        org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        email = auth.getName();
-        System.out.println(auth.getAuthorities());
-
-        System.out.println("Personal " + email);
-        User user = userRepository.getUserByEmail(email);
-        CustomOAuth2User oauthUser = (CustomOAuth2User) auth.getPrincipal();
-        User user1 = userService.getMemberByEmail(oauthUser.getEmail());
-
-        if (user.getRoles().toString().equals("[ADMIN]")) {
-            return "403";
-        } else {
-            return "redirect:/user/personal";
-        }
-
-    }*/
 
     @GetMapping("/personal")
     public String personal(Model model){

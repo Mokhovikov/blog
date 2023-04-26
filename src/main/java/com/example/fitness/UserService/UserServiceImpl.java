@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserService {
         roles.add(userRole);
         user.setRoles(roles);
         user.setProvider(Provider.LOCAL);
+        user.setVisit(0);
         user.setEnabled(false);
         userRepository.save(user);
         System.out.println("work");

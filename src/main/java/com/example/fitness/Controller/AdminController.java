@@ -2,9 +2,11 @@ package com.example.fitness.Controller;
 
 import com.example.fitness.Entity.Analyze;
 import com.example.fitness.Entity.Blog;
+import com.example.fitness.Entity.Message;
 import com.example.fitness.Entity.User;
 import com.example.fitness.Repository.AnalyzeRepository;
 import com.example.fitness.Repository.BlogRepository;
+import com.example.fitness.Repository.MessageRepository;
 import com.example.fitness.Repository.UserRepository;
 import com.example.fitness.UserService.BlogService;
 import com.example.fitness.UserService.UserServiceImpl;
@@ -16,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,6 +34,8 @@ public class AdminController {
 
     private final AnalyzeRepository analyzeRepository;
 
+    private final MessageRepository messageRepository;
+
     private final BlogService blogService;
 
 
@@ -42,9 +47,18 @@ public class AdminController {
 
             return "redirect:/";
         }if (keyword != null) {
-            List<User> users = userService.getByKeyword(keyword);
-            model.addAttribute("users", users);
-            return "admin/users";
+            List<User> users = userRepository.findByKeyword(keyword);
+            List<User> res = new ArrayList<>();
+            users.forEach(user -> {
+                if(user.getRoles().toString().equals("[USER]")){
+                    res.add(user);
+                };
+            });
+            if(res.isEmpty()){
+                model.addAttribute("notfound", "Ничего не найдено");
+            }
+            model.addAttribute("users", res);
+            return "users";
         }
         else if (!userRepository.findAll().isEmpty()) {
 
@@ -58,8 +72,12 @@ public class AdminController {
 
 
     @PostMapping("/deleteUser")
-    public String deleteUser(Model model, @RequestParam String UserEmail) {
-        userRepository.deleteById(UserEmail);
+    public String deleteUser(Model model, @RequestParam String userEmail) {
+        analyzeRepository.deleteByUserEmail(userEmail);
+        userRepository.deleteUsersByUserEmail(userEmail);
+
+
+
         return "redirect:/admin/users";
     }
 
@@ -141,30 +159,132 @@ public class AdminController {
 
 
     @GetMapping("/stat")
-    public String stat(Model model){
+    @RequestMapping(path = {"/stat","/searchStat"})
+    public String stat(Model model, String keyword){
 
-        List<Analyze> analyzeIterable = analyzeRepository.findAll();
-        model.addAttribute("stats", analyzeIterable);
+        
+        if(analyzeRepository.findAll().isEmpty()&&blogRepository.findAll().isEmpty()){
+            return "redirect:/";
+        } else if (keyword!=null) {
+            List<Analyze> analyzeIterable = analyzeRepository.findAll();
+            List<Blog> blogIterable = blogRepository.findByKeyword(keyword);
+
+            model.addAttribute("stats", analyzeIterable);
+            model.addAttribute("blogs", blogIterable);
+
+            //Посещаемость блога
+            int totalVisit = userRepository.getTotalViews();
+            model.addAttribute("totalVisit", totalVisit);
+
+            //Кол-во просмотров одним пользователем
+            double totalViews = analyzeRepository.getTotalViews();
+            double totalUser = userRepository.findAll().size();
+            double amountPerUser = totalViews/totalUser;
+            model.addAttribute("amountPerUser", amountPerUser);
+
+            HashMap<String, Integer> averageAge = new HashMap<>();
+            blogIterable.forEach(blog -> averageAge.put(blog.getTitle(), (int) analyzeRepository.getAverageAgeById(blog.getId())));
+            model.addAttribute("AverageAge", averageAge);
+
+            HashMap<String, Integer> menAnalyze = new HashMap<>();
+            blogIterable.forEach(blog -> menAnalyze.put(blog.getTitle(), analyzeRepository.getAllBySexAndIdArticle("Man", blog.getId()).size()));
+            model.addAttribute("amountMan", menAnalyze);
+
+            HashMap<String, Integer> womenAnalyze = new HashMap<>();
+            blogIterable.forEach(blog -> womenAnalyze.put(blog.getTitle(), analyzeRepository.getAllBySexAndIdArticle("Women", blog.getId()).size()));
+            model.addAttribute("amountWomen", womenAnalyze);
+
+
+            //Cамые просматриваемые статьи
+            HashMap<String, Integer> ViewsAnalyze = new HashMap<>();
+            blogIterable.forEach(blog -> ViewsAnalyze.put(blog.getTitle(), analyzeRepository.getViewsByIdArticle(blog.getId())));
+            model.addAttribute("amountViews", ViewsAnalyze);
 
 
 
-        List<Blog> blogIterable = blogRepository.findAll();
-        model.addAttribute("blogs", blogIterable);
+
+            HashMap<String, Integer> womenViewsAnalyze = new HashMap<>();
+            blogIterable.forEach(blog -> womenViewsAnalyze.put(blog.getTitle(), analyzeRepository.getViewsByIdArticleAndSex(blog.getId(),"Women")));
+            model.addAttribute("amountWomenViews", womenViewsAnalyze);
+
+            HashMap<String, Integer> menViewsAnalyze = new HashMap<>();
+            blogIterable.forEach(blog -> menViewsAnalyze.put(blog.getTitle(), analyzeRepository.getViewsByIdArticleAndSex(blog.getId(),"Man")));
+            model.addAttribute("amountMenViews", menViewsAnalyze);
+
+            ArrayList<HashMap<String, Integer>> arrayList = new ArrayList<>();
+            arrayList.add(ViewsAnalyze);
+            arrayList.add(averageAge);
+
+            arrayList.add(menAnalyze);
+            arrayList.add(menViewsAnalyze);
+
+            arrayList.add(womenAnalyze);
+            arrayList.add(womenViewsAnalyze);
+
+            model.addAttribute("allAnalyzes", arrayList);
 
 
-        HashMap<String, Double> averageAge = new HashMap<>();
-        blogIterable.forEach(blog -> averageAge.put(blog.getTitle(),analyzeRepository.getAverageAgeById(blog.getId())));
-        model.addAttribute("AverageAge", averageAge);
+            return "admin/s";
+        } else if (!blogRepository.findAll().isEmpty()&&!analyzeRepository.findAll().isEmpty()) {
 
-        HashMap<String, Integer> menAnalyze = new HashMap<>();
-        blogIterable.forEach(blog -> menAnalyze.put(blog.getTitle(), analyzeRepository.getAllBySexAndIdArticle("Man", blog.getId()).size()));
-        model.addAttribute("amountMan", menAnalyze);
 
-        HashMap<String, Integer> womenAnalyze = new HashMap<>();
-        blogIterable.forEach(blog -> womenAnalyze.put(blog.getTitle(), analyzeRepository.getAllBySexAndIdArticle("Women", blog.getId()).size()));
-        model.addAttribute("amountWomen", womenAnalyze);
+            List<Analyze> analyzeIterable = analyzeRepository.findAll();
+            model.addAttribute("stats", analyzeIterable);
 
-        return "admin/stat";
+            List<Blog> blogIterable = blogRepository.findAll();
+            model.addAttribute("blogs", blogIterable);
+
+            //Посещаемость блога
+            int totalVisit = userRepository.getTotalViews();
+            model.addAttribute("totalVisit", totalVisit);
+
+            //Кол-во просмотров одним пользователем
+            double totalViews = analyzeRepository.getTotalViews();
+            double totalUser = userRepository.findAll().size();
+            double amountPerUser = totalViews / totalUser;
+            model.addAttribute("amountPerUser", amountPerUser);
+
+            HashMap<String, Integer> averageAge = new HashMap<>();
+            blogIterable.forEach(blog -> averageAge.put(blog.getTitle(), (int) analyzeRepository.getAverageAgeById(blog.getId())));
+            model.addAttribute("AverageAge", averageAge);
+
+            HashMap<String, Integer> menAnalyze = new HashMap<>();
+            blogIterable.forEach(blog -> menAnalyze.put(blog.getTitle(), analyzeRepository.getAllBySexAndIdArticle("Man", blog.getId()).size()));
+            model.addAttribute("amountMan", menAnalyze);
+
+            HashMap<String, Integer> womenAnalyze = new HashMap<>();
+            blogIterable.forEach(blog -> womenAnalyze.put(blog.getTitle(), analyzeRepository.getAllBySexAndIdArticle("Women", blog.getId()).size()));
+            model.addAttribute("amountWomen", womenAnalyze);
+
+
+            //Cамые просматриваемые статьи
+            HashMap<String, Integer> ViewsAnalyze = new HashMap<>();
+            blogIterable.forEach(blog -> ViewsAnalyze.put(blog.getTitle(), analyzeRepository.getViewsByIdArticle(blog.getId())));
+            model.addAttribute("amountViews", ViewsAnalyze);
+
+
+            HashMap<String, Integer> womenViewsAnalyze = new HashMap<>();
+            blogIterable.forEach(blog -> womenViewsAnalyze.put(blog.getTitle(), analyzeRepository.getViewsByIdArticleAndSex(blog.getId(), "Women")));
+            model.addAttribute("amountWomenViews", womenViewsAnalyze);
+
+            HashMap<String, Integer> menViewsAnalyze = new HashMap<>();
+            blogIterable.forEach(blog -> menViewsAnalyze.put(blog.getTitle(), analyzeRepository.getViewsByIdArticleAndSex(blog.getId(), "Man")));
+            model.addAttribute("amountMenViews", menViewsAnalyze);
+
+            ArrayList<HashMap<String, Integer>> arrayList = new ArrayList<>();
+            arrayList.add(ViewsAnalyze);
+            arrayList.add(averageAge);
+
+            arrayList.add(menAnalyze);
+            arrayList.add(menViewsAnalyze);
+
+            arrayList.add(womenAnalyze);
+            arrayList.add(womenViewsAnalyze);
+
+            model.addAttribute("allAnalyzes", arrayList);
+            return "admin/s";
+        }
+        return null;
     }
 
     @RequestMapping(path ={"/allblog", "/searchBlog"})
@@ -223,5 +343,27 @@ public class AdminController {
         System.out.println("Edited");
 
         return "redirect:/admin/allblog";
+    }
+
+    @RequestMapping(path ={"/messages", "/searchMessage"})
+    public String message(Model model, String keyword) {
+
+
+        if (messageRepository.findAll().isEmpty()) {
+
+            return "redirect:/";
+        }if (keyword != null) {
+            List<Message> messages = messageRepository.findByKeyword(keyword);
+            model.addAttribute("messages", messages);
+            return "admin/messages";
+        }
+        else if (!messageRepository.findAll().isEmpty()) {
+
+            Iterable<Message> messages = messageRepository.findAll();
+            model.addAttribute("messages", messages);
+            return "admin/messages";
+        }
+
+        return null;
     }
 }

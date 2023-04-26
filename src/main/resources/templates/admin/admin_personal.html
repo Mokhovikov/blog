@@ -254,6 +254,7 @@
         <a th:href="@{/admin/users}"><input type="button" value="Удалить клиента"></a>
         <a th:href="@{/admin/add}"><input type="button" value="Добавить статьи"></a>
         <a th:href="@{/admin/allblog}"><input type="button" value="Просмотреть статьи"></a>
+        <a th:href="@{/admin/messages}"><input type="button" value="Просмотреть сообщения"></a>
         <a th:href="@{/admin/stat}"><input type="button" value="Просмотреть статистику"></a>
         <div sec:authorize="isAuthenticated()" class="text-center p-3">
             <form th:action="@{/logout}" method="post">

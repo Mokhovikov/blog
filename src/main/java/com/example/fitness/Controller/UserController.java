@@ -38,7 +38,7 @@ public class UserController {
 
 
 
-        if(user==null){
+       /* if(user==null){
             CustomOAuth2User oauthUser = (CustomOAuth2User) auth.getPrincipal();
             User user1 = userService.getMemberByEmail(oauthUser.getEmail());
             model.addAttribute("user", user1);
@@ -47,7 +47,7 @@ public class UserController {
             user1.setNumber(phone);
             userService.update(user1);
             return "redirect:/user/google/personal";
-        }else {
+        }else {*/
 
             user.setFirstname(firstname);
             user.setLastname(lastname);
@@ -56,28 +56,24 @@ public class UserController {
             userService.update(user);
             model.addAttribute("user", user);
             return "redirect:/user/personal";
-        }
+
 
     }
+
 
     @GetMapping("/personal")
-    public String personal(Model model){
+    public String personal(Model model, org.apache.tomcat.util.net.openssl.ciphers.Authentication authentication, String email) {
         org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
+        email = auth.getName();
         User user = userService.getMemberByEmail(email);
-
-        if(user.getRoles().toString().equals("[ADMIN]")){
-            model.addAttribute("user", user);
-            return "redirect:/admin/personal";
-        } else if (user.getRoles().toString().equals("[USER]")) {
-            model.addAttribute("user", user);
-            return "redirect:/user/personal";
-        }
-        return null;
+        model.addAttribute("user", user);
+        return "user/personal";
     }
 
 
 
+
+/*
     @GetMapping("/google/personal")
     public String googlePersonal(Authentication auth, Model model){
         CustomOAuth2User oauthUser = (CustomOAuth2User) auth.getPrincipal();
@@ -87,6 +83,7 @@ public class UserController {
         model.addAttribute("user", user);
         return "user/googlePersonal";
     }
+*/
 
 /*    @PostMapping("/q")
     public String loginMember(

@@ -6,20 +6,51 @@
 </head>
 <body>
 
+<div>
+    <h2 th:text="${'Общая посещаемость блога: ' + totalVisit}"></h2>
+</div>
+
+<hr>
+
+<div>
+    <h2 th:text="${'Кол-во просмотров статей одним пользовователем: ' + amountPerUser}"></h2>
+</div>
+
+<hr>
+
 <div th:each="age:${AverageAge}">
-    <h2 th:text="${ 'Средний возраст для статьи: ' + age.key +  ': ' + age.value}"></h2>
+    <h2 th:text="${ 'Средний возраст пользователей для статьи: ' + age.key +  ': ' + age.value}"></h2>
 </div>
 
 <hr>
 
 <div th:each="man:${amountMan}">
-    <h2 th:text="${'Кол-во мужчин для статьи: ' + man.key + ': ' + man.value}"></h2>
+    <h2 th:text="${'Кол-во мужчин пользователей для статьи: ' + man.key + ': ' + man.value}"></h2>
 </div>
 
 <hr>
 
 <div th:each="women:${amountWomen}">
-    <h2 th:text="${'Кол-во женщин для статьи: ' + women.key + ': ' + women.value}"></h2>
+    <h2 th:text="${'Кол-во женщин пользователей для статьи: ' + women.key + ': ' + women.value}"></h2>
+</div>
+
+<hr>
+
+<div th:each="views:${amountViews}">
+    <h2 th:text="${'Кол-во просмотров для статьи: ' + views.key + ': ' + views.value}"></h2>
+</div>
+
+<hr>
+
+
+<div th:each="womenViews:${amountWomenViews}">
+    <h2 th:text="${'Кол-во просмотров среди женщин пользователей для статьи: ' + womenViews.key + ': ' + womenViews.value}"></h2>
+</div>
+
+<hr>
+
+<div th:each="menViews:${amountMenViews}">
+    <h2 th:text="${'Кол-во просмотров среди мужчин пользователей для статьи: ' + menViews.key + ': ' + menViews.value}"></h2>
 </div>
 
 </body>

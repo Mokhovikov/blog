@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Аккаунт заблокирован</title>
-    <script type="text/javascript">
+  <script type="text/javascript">
         setTimeout(function () {
             window.location.href = '/';
         }, 3 * 1000);
@@ -23,7 +23,7 @@
             font-family: 'Montserrat Alternates';
             font-size: 16px;
             line-height: 1.4;
-            background: yellow;
+            background: white;
             color: black;
             height: 100vh;
         }
@@ -34,11 +34,29 @@
             align-items: flex-start;
             justify-content: center;
         }
+
+        .pic{
+            display: grid;
+            justify-content: center;
+            align-items: center;
+            margin-left: 13.5%;
+        }
+
+        .container-pic{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
 
-<h1>Ваш аккаунт был заблокирован</h1>
+<div class="container-pic">
+    <img th:src="@{../../playground_assets/sad.png}" src="../static/playground_assets/sad.png" class="pic">
+
+</div>
+
+
 
 </body>
 </html>

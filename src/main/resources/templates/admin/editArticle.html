@@ -478,7 +478,9 @@
         <input type="text" id="description" name="description" placeholder="Описание:" th:value="${blog.getDescription()}">
 
         <label for="message">Текст статьи:</label>
-        <input class="textarea-class" id="message" name="text" placeholder="Текст статьи:" th:value="${blog.getText()}" height="500">
+        <textarea class="textarea-class" id="message" name="text" placeholder="Текст статьи:" rows="5" cols="25" th:text="${blog.getText()}">
+
+        </textarea>
 
         <input type="submit" value="Send">
 
@@ -486,8 +488,6 @@
   </div>
 </div>
 
-
-</div>
 
 
 </body>

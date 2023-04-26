@@ -39,6 +39,9 @@ public class User {
     @Column
     private String number;
 
+    @Column
+    private int visit;
+
     private boolean enabled;
 
     @Column
@@ -56,11 +59,13 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
 
-    public User(String firstname, String lastname, String email, String password) {
+    public User(String firstname, String lastname, String email, String password, int age, String sex) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
+        this.age = age;
+        this.sex = sex;
 
     }
 

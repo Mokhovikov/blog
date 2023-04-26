@@ -43,80 +43,61 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/login", "/signUp", "/", "/blog", "/search").permitAll()
-                .antMatchers("/user/**", "/blog/{id}").hasAuthority("USER")
-                .antMatchers("/user/**", "/blog/{id}").authenticated()
+                .antMatchers("/login", "/signUp", "/", "/search").permitAll()
+                .antMatchers("/user/**", "/blog/{id}", "/blog").hasAuthority("USER")
+                .antMatchers("/user/**","/blog", "/blog/{id}").authenticated()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 //.anyRequest().authenticated()
                 .and()
                 .formLogin().permitAll()
                 .loginPage("/login")
-                .loginProcessingUrl("/loading")
-                .usernameParameter("email")
-                .passwordParameter("password")
-                .defaultSuccessUrl("/personal")
-                .successHandler(new AuthenticationSuccessHandler() {
+                    .loginProcessingUrl("/login")
+                        .usernameParameter("email")
+                        .passwordParameter("password")
+                           .successHandler((request, response, authentication) -> {
+                                System.out.println("AuthenticationSuccessHandler invoked");
+                                System.out.println("Authentication name: " + authentication.getName());
+                                User user = userServiceImpl.getMemberByEmail(authentication.getName());
+                                System.out.println(authentication.getAuthorities());
 
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                                        Authentication authentication) throws IOException, ServletException {
-                        System.out.println("AuthenticationSuccessHandler invoked");
-                        System.out.println("Authentication name: " + authentication.getName());
-                        User user = userServiceImpl.getMemberByEmail(authentication.getName());
-                        System.out.println(authentication.getAuthorities());
+                                if (!user.isEnabled()) {
+                                    if (user.getRoles().toString().equals("[ADMIN]")) {
+                                        response.sendRedirect("/admin/personal");
+                                    } else if (user.getRoles().toString().equals("[USER]")) {
+                                        response.sendRedirect("/user/personal");
+                                    }
+                                }else {
+                                    response.sendRedirect("/block");
+                                }
 
-
-                            if (user.getRoles().toString().equals("[ADMIN]")) {
-                                response.sendRedirect("/admin/personal");
-                            } else if (user.getRoles().toString().equals("[USER]")) {
-                                response.sendRedirect("/user/personal");
-                            }
-
-                    }
-                })
+                            })
                 .and()
                 .oauth2Login()
                 .loginPage("/login")
-                .userInfoEndpoint()
-                .userService(oauthUserService)
-                .and()
-                .successHandler(new AuthenticationSuccessHandler() {
+                    .userInfoEndpoint()
+                        .userService(oauthUserService)
+                        .and()
+                             .successHandler((request, response, authentication) -> {
+                                System.out.println("AuthenticationSuccessHandler invoked");
+                                System.out.println("Authentication name: " + authentication.getName());
 
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                                        Authentication authentication) throws IOException, ServletException {
-                        System.out.println("AuthenticationSuccessHandler invoked");
-                        System.out.println("Authentication name: " + authentication.getName());
-                        if(authentication.getName().contains("@")){
-                            User user = userServiceImpl.getMemberByEmail(authentication.getName());
-                            if (!user.isEnabled()) {
-                                    response.sendRedirect("/user/personal");
-                                System.out.println("redirected");
-                            } else {
-                                response.sendRedirect("/block");
-                            }
-                        }else{
-                            CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
+                                    CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
 
-                            userServiceImpl.processOAuthPostLogin(oauthUser.getEmail(), oauthUser.getAttributes().get("given_name").toString(),
-                                    oauthUser.getAttributes().get("family_name").toString());
+                                    userServiceImpl.processOAuthPostLogin(oauthUser.getEmail(), oauthUser.getAttributes().get("given_name").toString(),
+                                            oauthUser.getAttributes().get("family_name").toString());
 
-                            User user = userServiceImpl.getMemberByEmail(oauthUser.getEmail());
+                                    User user = userServiceImpl.getMemberByEmail(oauthUser.getEmail());
 
-                            System.out.println(user.getRoles());
-                            System.out.println(oauthUser.getAttributes());
+                                    System.out.println(user.getRoles());
+                                    System.out.println(oauthUser.getAttributes());
 
-                            if (!user.isEnabled()) {
+                                    if (!user.isEnabled()) {
 
-                                response.sendRedirect("/user/google/personal");
-                            } else {
-                                response.sendRedirect("/block");
-                            }
-                        }
-
-
-                    }
-                })
+                                        response.sendRedirect("/user/personal");
+                                    } else {
+                                        response.sendRedirect("/block");
+                                    }
+                             })
 
                 //.defaultSuccessUrl("/list")
                 .and()
