@@ -36,8 +36,13 @@
     }
 
     table {
-      width: 100%;
+      width: 80%;
       border-collapse: collapse;
+    }
+
+    .container{
+      display: flex;
+
     }
 
     th, td {
@@ -205,42 +210,48 @@
 
 </header>
 
-<h1>Пользователи</h1>
+<h1>Все статьи</h1>
 
-<div class="search-contain">
+<div class="container">
+  <div class="search-contain">
 
-  <form th:action="@{/admin/searchBlog}" method="get" style="display: grid; width: 20%;">
-    <input type="text" name="keyword" th:value="${keyword}" placeholder="Поиск по названию"
-           style="font-size: 20px;" size="50">
-    <button type="submit" class="btn btn-info">Search</button>
-  </form>
+    <form th:action="@{/admin/searchBlog}" method="get" style="display: grid; width: 20%; height: 20%">
+      <input type="text" name="keyword" th:value="${keyword}" placeholder="Поиск по названию"
+             style="font-size: 20px;" >
+      <button type="submit" class="btn btn-info">Search</button>
+    </form>
+    <h5 th:text="${notfound}" style="color: red"></h5>
+    <a th:href="@{/admin/personal}"><input type="button" value="Назад"></a>
 
+  </div>
+  <table id="myTable">
+
+    <thead>
+    <tr>
+      <th onclick="sortTable(0)">№</th>
+      <th onclick="sortTable(1)">Заголовок</th>
+      <th>Действие</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="blog:${blogs}">
+      <td><span th:text="${blog.getId()}"></span></td>
+      <td><span th:text="${blog.getTitle()}"></span></td>
+      <td>
+        <form th:action="@{/admin/deleteBlog}" method="post">
+          <input type="submit" class="delete" name="id" th:value="${blog.getId()}">Удалить</input>
+        </form>
+        <a th:href="'/admin/editBlog/' + ${blog.getId()}">
+          <input type="submit" class="delete" name="id" th:value="${blog.getId()}">Редактировать</input>
+        </a>
+
+      </td>
+    </tr>
+    <!-- Add more rows here -->
+    </tbody>
+  </table>
 </div>
-<table id="myTable">
-  <thead>
-  <tr>
-    <th onclick="sortTable(0)">№</th>
-    <th onclick="sortTable(1)">Заголовок</th>
-    <th>Действие</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="blog:${blogs}">
-    <td><span th:text="${blog.getId()}"></span></td>
-    <td><span th:text="${blog.getTitle()}"></span></td>
-    <td>
-      <form th:action="@{/admin/deleteBlog}" method="post">
-        <input type="submit" class="delete" name="id" th:value="${blog.getId()}">Удалить</input>
-      </form>
-      <a th:href="'/admin/editBlog/' + ${blog.getId()}">
-        <input type="submit" class="delete" name="id" th:value="${blog.getId()}">Редактировать</input>
-      </a>
 
-    </td>
-  </tr>
-  <!-- Add more rows here -->
-  </tbody>
-</table>
 <script>
   function sortTable(n) {
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
@@ -297,7 +308,6 @@
     }
   }
 </script>
-<a th:href="@{/admin/personal}"><input type="button" value="Назад"></a>
 
 </body>
 </html>

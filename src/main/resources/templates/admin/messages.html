@@ -36,8 +36,13 @@
     }
 
     table {
-      width: 100%;
+      width: 80%;
       border-collapse: collapse;
+    }
+
+    .container{
+      display: flex;
+
     }
 
     th, td {
@@ -205,15 +210,18 @@
 
 </header>
 
-<h1>Пользователи</h1>
+<h1>Сообщения</h1>
 
+<div class="container">
 <div class="search-contain">
 
-  <form th:action="@{/admin/searchMessage}" method="get" style="display: grid; width: 20%;">
+  <form th:action="@{/admin/searchMessage}" method="get" style="display: grid; width: 20%; height: 20%;">
     <input type="text" name="keyword" th:value="${keyword}" placeholder="Поиск по имени или email"
-           style="font-size: 20px;" size="50">
+           style="font-size: 20px;" >
     <button type="submit" class="btn btn-info">Search</button>
   </form>
+  <h5 th:text="${notfound}" style="color: red"></h5>
+  <a th:href="@{/admin/personal}"><input type="button" value="Назад"></a>
 
 </div>
 
@@ -237,6 +245,7 @@
   <!-- Add more rows here -->
   </tbody>
 </table>
+</div>
 <script>
   function sortTable(n) {
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
@@ -293,7 +302,6 @@
     }
   }
 </script>
-<a th:href="@{/admin/personal}"><input type="button" value="Назад"></a>
 
 </body>
 </html>

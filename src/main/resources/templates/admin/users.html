@@ -36,8 +36,13 @@
         }
 
         table {
-            width: 100%;
+            width: 80%;
             border-collapse: collapse;
+        }
+
+        .container{
+            display: flex;
+
         }
 
         th, td {
@@ -204,17 +209,20 @@
 
 
 </header>
-
 <h1>Пользователи</h1>
+
+<div class="container">
+
 
 <div class="search-contain">
 
-    <form th:action="@{/admin/search}" method="get" style="display: grid; width: 20%;">
-        <input type="text" name="keyword" th:value="${keyword}" placeholder="Поиск по фамилии или email"
-               style="font-size: 20px;" size="50">
+    <form th:action="@{/admin/search}" method="get" style="display: grid; width: 20%; height: 20%;">
+        <input type="text" name="keyword" th:value="${keyword}" placeholder="Поиск по имени или email"
+               style="font-size: 20px;" >
         <button type="submit" class="btn btn-info">Search</button>
     </form>
-    <h1 th:text="${notfound}"></h1>
+    <h5 th:text="${notfound}" style="color: red"></h5>
+    <a th:href="@{/admin/personal}"><input type="button" value="Назад"></a>
 </div>
 
 
@@ -258,7 +266,8 @@
     <!-- Add more rows here -->
     </tbody>
 </table>
-<a th:href="@{/admin/personal}"><input type="button" value="Назад"></a>
+</div>
+
 
 </body>
 </html>

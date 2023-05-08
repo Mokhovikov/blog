@@ -348,7 +348,9 @@
                 background: #cccccc;
             }
 
-
+            textarea{
+                resize: none;
+            }
 
             .describe-form {
                 display: contents;
@@ -661,14 +663,14 @@
     <div class="title-back"><h1>JabkaDev</h1></div>
 
 
-    <div sec:authorize="isAuthenticated()" class="text-center p-3">
+    <div sec:authorize="isAuthenticated()" class="text-center p-3" >
 
         <nav>
             <ul>
-                <li><a th:href="@{/personal}">Личный кабинет</a></li>
+                <li><a style="font-family: 'Oswald'" th:href="@{/personal}">Личный кабинет</a></li>
                 <li>
                     <form th:action="@{/logout}" method="post">
-                        <input type="submit" value="Logout" class="logout"/>
+                        <input style="font-family: 'Oswald'" type="submit" value="Выйти" class="logout"/>
                     </form>
                 </li>
             </ul>
@@ -678,7 +680,7 @@
     <div sec:authorize="!isAuthenticated()" class="text-center p-3">
         <nav>
             <ul>
-                <li><a th:href="@{/login}">Войти</a></li>
+                <li><a style="font-family: 'Oswald'" th:href="@{/login}">Войти</a></li>
             </ul>
         </nav>
     </div>
@@ -687,13 +689,11 @@
 </header>
 
 <div class="first-block">
-    <!-- <img th:src="@{../../playground_assets/back.png}"
-          src="../playground_assets/back.png"
-          class="profile-pic">-->
+
     <div class="title-link">
         <h1>Java Developer</h1>
-        <h3>Hi! My name is Ivan Mokhovikov! This site about me and programming!</h3>
-        <a class="a" th:href="@{/blog}"><input type="button" value="Blog"></a>
+        <h3>Привет! Меня зовут Иван! И этот блог про меня и программирование!</h3>
+        <a class="a" th:href="@{/blog}"><input type="button" value="Блог"></a>
     </div>
 
 
@@ -725,15 +725,6 @@
                         </a>
                     </div>
 
-               <!-- </div>-->
-            <!--    <div th:unless="${project.getId()==1||project.getId()%3==0}">
-                    <div class="describe" >
-                        <h2 class="h2-des-first" th:text="${project.getName()}"></h2>
-                        <hr class="hr3">
-                        &lt;!&ndash;Язык&ndash;&gt;
-                        <h2 class="h2-des" th:text="${project.getLanguage()}"></h2>
-                    </div>
-                </div>-->
             </div>
 
 
@@ -758,9 +749,8 @@
         <div class="title-link">
 
             <h1 style="font-family: Oswald; width: 100%; font-size: 40px">Mobile Development Blog</h1>
-            <h3 style=" width: 100%;">I started to study mobile development. In this blog I talk about my way, successes
-                and other</h3>
-            <a class="a" th:href="@{/blog}"><input type="button" value="Blog"></a>
+            <h3 style=" width: 100%;">Я начинаю изучать мобильную разработку. И здесь я буду писать о своих успехах и о многом другом</h3>
+            <a class="a" th:href="@{/blog}"><input type="button" value="Блог"></a>
         </div>
     </div>
 
@@ -772,13 +762,10 @@
     <hr>
 
     <div class="blog-container">
-        <!-- <div class="blog-container-pic">
-             <img th:src="@{../../playground_assets/phone.png}" src="../playground_assets/phone.png" class="phone-pic">
-         </div>
- -->
+
         <div class="title-link-message">
-            <h1 style="font-family: Oswald; width: 100%; font-size: 40px">Contact JabkaDev</h1>
-            <h3 style=" width: 100%;">Get in touch with me, if you have a question</h3>
+            <h1 style="font-family: Oswald; width: 100%; font-size: 40px">Напиши JabkaDev</h1>
+            <h3 style=" width: 100%;">Оставайся на связи, если есть вопросы</h3>
         </div>
 
         <div class="form-message">
@@ -795,7 +782,7 @@
                 </textarea>
 
 
-                <input type="submit" value="Send">
+                <input style="width: 40%;" type="submit" value="Отправить">
             </form>
         </div>
     </div>

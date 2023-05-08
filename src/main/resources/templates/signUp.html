@@ -17,7 +17,7 @@
 
         body {
             margin: 0;
-            background: linear-gradient(294.15deg, #202020 , #202020 55.14%);
+            background-color: #252525;
 
         }
 
@@ -29,6 +29,11 @@
             justify-content: center;
             height: 91vh;
 
+        }
+
+        /*Убрать полосу прокрутки для всей страницы*/
+        ::-webkit-scrollbar {
+            width: 0;
         }
 
         form {
@@ -48,11 +53,10 @@
             color: red;
         }
 
-        input[type="text"], input[type="email"], input[type="password"], input[type="number"] {
+        input[type="text"], input[type="email"], input[type="password"], input[type="number"], input {
             padding: 10px;
             border: none;
             border-radius: 5px;
-            margin-bottom: 20px;
             font-size: 16px;
         }
 
@@ -103,7 +107,7 @@
 
             }
 
-            input[type="text"], input[type="email"], input[type="password"], input[type="submit"], input[type="number"] {
+            input[type="text"], input[type="email"], input[type="password"], input[type="submit"], input[type="number"], input {
                 font-size: 15px;
             }
 
@@ -123,13 +127,13 @@
     <form th:action="@{/signUp}" method="post">
         <h3 th:text="${error}"></h3>
         <label for="firstname">Имя:</label>
-        <input type="text" id="firstname" name="firstname" placeholder="Имя" minlength="2" required>
+        <input type="text" id="firstname" name="firstname" oninput="this.value = this.value.replace(/[0-9.]/g,'').replace(/\s+/gi,'').replace(/[e,+,@,#,$,%,&,*,/,?,>,<,;,:,,,-]/g, '');"  pattern=".{2,}" placeholder="Имя" minlength="2" required>
 
         <label for="lastname">Фамилия:</label>
-        <input type="text" id="lastname" name="lastname" placeholder="Фамилия" minlength="2" required>
+        <input type="text" id="lastname" name="lastname" oninput="this.value = this.value.replace(/[0-9.]/g,'').replace(/\s+/gi,'').replace(/[e,+,@,#,$,%,&,*,/,?,>,<,;,:,,,-]/g, '');"  pattern=".{2,}" placeholder="Фамилия" minlength="2" required>
 
         <label for="age">Возраст:</label>
-        <input type="number" id="age" name="age" placeholder="Возраст" required>
+        <input id="age" name="age" minlength="0" min="6" title="Минимальная возраст - 6" maxlength="2" pattern="[0-9]{,2}" placeholder="Возраст" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required>
 
         <label for="sex">Пол:
         <label id="sex">
@@ -138,12 +142,12 @@
         </label>
         </label>
 
-        <h6 th:text="${valid}"></h6>
+        <h6 th:text="${valid}" style="margin: 0; color: red"></h6>
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" placeholder="Email"  minlength="12" maxlength="24" required>
+        <input type="email" id="email" name="email" placeholder="Email"  minlength="12" maxlength="24" oninput="this.value = this.value.replace(/\s+/gi,'');" required>
 
         <label for="password">Пароль:</label>
-        <input type="password" id="password" name="password" placeholder="Enter your password" minlength="8" required>
+        <input type="password" id="password" name="password" placeholder="Enter your password" minlength="8" oninput="this.value = this.value.replace(/\s+/gi,'');" required>
 
         <input type="submit" value="Зарегистрироваться">
     </form>

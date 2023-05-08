@@ -6,6 +6,45 @@
     <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
     <meta charset="UTF-8">
     <title>Profile Page</title>
+    <script>
+        window.addEventListener("DOMContentLoaded", function() {
+            [].forEach.call( document.querySelectorAll('.tel'), function(input) {
+                var keyCode;
+                function mask(event) {
+                    event.keyCode && (keyCode = event.keyCode);
+                    var pos = this.selectionStart;
+                    if (pos < 3) event.preventDefault();
+                    var matrix = "+375-(__)-___-__-__",
+                        i = 0,
+                        def = matrix.replace(/\D/g, ""),
+                        val = this.value.replace(/\D/g, ""),
+                        new_value = matrix.replace(/[_\d]/g, function(a) {
+                            return i < val.length ? val.charAt(i++) || def.charAt(i) : a
+                        });
+                    i = new_value.indexOf("_");
+                    if (i != -1) {
+                        i < 5 && (i = 3);
+                        new_value = new_value.slice(0, i)
+                    }
+                    var reg = matrix.substr(0, this.value.length).replace(/_+/g,
+                        function(a) {
+                            return "\\d{1," + a.length + "}"
+                        }).replace(/[+()]/g, "\\$&");
+                    reg = new RegExp("^" + reg + "$");
+                    if (!reg.test(this.value) || this.value.length < 5 || keyCode > 47 && keyCode < 58) this.value = new_value;
+                    if (event.type == "blur" && this.value.length < 5)  this.value = ""
+                }
+
+                input.addEventListener("input", mask, false);
+                input.addEventListener("focus", mask, false);
+                input.addEventListener("blur", mask, false);
+                input.addEventListener("keydown", mask, false)
+
+            });
+
+        });
+
+    </script>
     <style>
         /* Global styles */
         * {
@@ -19,6 +58,7 @@
             font-family: 'Oswald';
             font-size: 16px;
             line-height: 1.4;
+
         }
 
         /* Header styles */
@@ -224,29 +264,7 @@
 
 
     <div class="title-back"><h1>JabkaDev</h1></div>
-
-
-    <div sec:authorize="isAuthenticated()" class="text-center p-3">
-
-        <nav>
-            <ul>
-                <li><a th:href="@{/personal}">Личный кабинет</a></li>
-                <li>
-                    <form th:action="@{/logout}" method="post">
-                        <input type="submit" value="Logout" class="logout"/>
-                    </form>
-                </li>
-            </ul>
-        </nav>
-
-    </div>
-    <div sec:authorize="!isAuthenticated()" class="text-center p-3">
-        <nav>
-            <ul>
-                <li><a th:href="@{/login}">Войти</a></li>
-            </ul>
-        </nav>
-    </div>
+    <a th:href="@{/blog}" style="color: white; text-decoration: none;">Блог</a>
 
 
 </header>
@@ -261,34 +279,30 @@
     <div class="form-container">
 
         <form th:action="@{/user/update}" method="post" enctype="multipart/form-data">
-            <label for="firstname">Фамилия:</label>
-            <input type="text" id="firstname" name="firstname" placeholder="Enter your full name"
-                   th:value="${user.getLastname()}">
-
-            <label for="lastname">Имя:</label>
-            <input type="text" id="lastname" name="lastname" placeholder="Enter your full name"
+            <label for="firstname">Имя:</label>
+            <input type="text" id="firstname" name="firstname"  oninput="this.value = this.value.replace(/[0-9.]/g,'').replace(/\s+/gi,'').replace(/[e,+,@,#,$,%,&,*,/,?,>,<,;,:,,,-]/g, '');" placeholder="Имя"
                    th:value="${user.getFirstname()}">
+
+            <label for="lastname">Фамилия:</label>
+            <input type="text" id="lastname" name="lastname"  oninput="this.value = this.value.replace(/[0-9.]/g,'').replace(/\s+/gi,'').replace(/[e,+,@,#,$,%,&,*,/,?,>,<,;,:,,,-]/g, '');" placeholder="Фамилия"
+                   th:value="${user.getLastname()}">
 
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" placeholder="Enter your email" th:value="${user.getEmail()}"
                    disabled>
 
             <label for="phone">Телефон:</label>
-            <input type="text" id="phone" name="phone" placeholder="Enter your phone number"
+            <input type="text" id="phone" name="phone" class="tel" placeholder="Телефон"
                    th:value="${user.getNumber()}">
 
 
-            <input type="submit" value="Save Changes">
+            <input type="submit" value="Сохранить">
         </form>
 
-        <!--   <div sec:authorize="isAuthenticated()" class="text-center p-3">
-             <form th:action="@{/logout}" method="post">
-               <input type="submit" value="Logout" class="logout" />
-             </form>
-           </div>-->
+
         <div sec:authorize="isAuthenticated()" class="text-center p-3">
             <form th:action="@{/logout}" method="post">
-                <input type="submit" value="Logout" class="logout"/>
+                <input type="submit" value="Выйти" class="logout"/>
             </form>
         </div>
 
