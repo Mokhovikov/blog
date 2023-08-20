@@ -36,16 +36,7 @@ public class UserController {
 
 
 
-       /* if(user==null){
-            CustomOAuth2User oauthUser = (CustomOAuth2User) auth.getPrincipal();
-            User user1 = userService.getMemberByEmail(oauthUser.getEmail());
-            model.addAttribute("user", user1);
-            user1.setFirstname(firstname);
-            user1.setLastname(lastname);
-            user1.setNumber(phone);
-            userService.update(user1);
-            return "redirect:/user/google/personal";
-        }else {*/
+
 
             user.setFirstname(firstname);
             user.setLastname(lastname);

@@ -10,7 +10,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @org.springframework.stereotype.Controller
@@ -29,6 +34,8 @@ public class Controller {
     private final ProjectRepository projectRepository;
 
     private final MessageRepository messageRepository;
+
+    public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/src/main/resources/static/playground_assets";
 
     @GetMapping("/")
     public String start(Model model) {
@@ -179,12 +186,21 @@ public class Controller {
     @PostMapping("/sendMessage")
     public String sendMessage(@RequestParam String name,
                               @RequestParam String email,
-                              @RequestParam String message){
+                              @RequestParam String message,
+    @RequestParam MultipartFile photo, Model model) throws IOException {
         Message message1 = new Message();
         message1.setMessage(message);
         message1.setName(name);
         message1.setEmail(email);
 
+        StringBuilder fileNames = new StringBuilder();
+        Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, photo.getOriginalFilename());
+        fileNames.append(photo.getOriginalFilename());
+        Files.write(fileNameAndPath, photo.getBytes());
+        model.addAttribute("msg", "Uploaded images: " + fileNames.toString());
+
+        message1.setPhoto(fileNames.toString());
+        System.out.println(fileNames.toString());
         messageRepository.save(message1);
         return "redirect:/index";
     }

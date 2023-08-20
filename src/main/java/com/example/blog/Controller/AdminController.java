@@ -150,14 +150,15 @@ public class AdminController {
 
         blog.setTitle(title);
         blog.setDescription(description);
-        blog.setText(text);
+        String strippedText = text.replaceAll("/<[^>]+>/g", " ");
+        blog.setText(strippedText);
 
         blogRepository.save(blog);
 
         return "redirect:/admin/personal";
     }
 
-
+/*
     @GetMapping("/stat")
     @RequestMapping(path = {"/stat","/searchStat"})
     public String stat(Model model, String keyword){
@@ -337,6 +338,8 @@ public class AdminController {
             return "admin/s";
 
     }
+
+    */
 
     @RequestMapping(path ={"/allblog", "/searchBlog"})
     public String allblogs(Model model, String keyword) {

@@ -122,12 +122,15 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers(
 
                 // статика
-                "/css/**",
+                "/static/css/**",
                 "/js/**",
                 "/fonts/**",
                 "/images/**",
                 "/playground_assets/**",
-                "/static/**"
+                "/static/**",
+                "/uploads/**",
+                "/blog/uploads/**"
+
         );
     }
 

@@ -231,6 +231,7 @@
   <tr>
     <th onclick="sortTable(0)">Имя</th>
     <th onclick="sortTable(1)">Email</th>
+    <th>Фото</th>
     <th>Сообщение</th>
 
   </tr>
@@ -239,6 +240,7 @@
   <tr th:each="message:${messages}">
     <td><span th:text="${message.getName()}"></span></td>
     <td><a th:href="'mailto:' + ${message.getEmail()}" th:text="${message.getEmail()}"></a></td>
+    <td><img th:src="@{'../../playground_assets/' + ${message.getPhoto()}}" style="width: 30%;"></td>
     <td><span th:text="${message.getMessage()}"></span></td>
 
   </tr>

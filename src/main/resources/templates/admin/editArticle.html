@@ -7,434 +7,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JabkaDev - Добавить статью</title>
-  <style>
-    * {
-      margin: 0;
-    }
+    <link th:href="@{../../css/add_articles.css}" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/f18452ea2a.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--
+    <script th:src="@{../../js/format.js}" rel="script"></script>
+-->
+    <script src="https://cdn.tiny.cloud/1/ilfmtjwh204stqwkx6qs1og1ba9mry0n2pcy5ox1dfxmj1b8/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 
-    /*Убрать полосу прокрутки для всей страницы*/
-    ::-webkit-scrollbar {
-      width: 0;
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Oswald';
-      background-color: #252525;
-    }
-
-
-    li {
-      list-style-type: none;
-    }
-
-
-    hr {
-      margin: 0;
-    }
-
-    a {
-      border-radius: 20px;
-      color: #fff;
-      text-decoration: none;
-    }
-
-    .profile-pic {
-      width: 100%;
-    }
-
-    /* стили для мобильных устройств */
-    @media only screen and (max-width: 600px) {
-      /* заголовок и навигация */
-      header {
-        background-color: black;
-        padding: 10px;
-        text-align: center;
-      }
-
-      h1 {
-        color: black;
-        font-size: 28px;
-        margin: 0;
-      }
-
-      nav ul {
-        display: none;
-      }
-
-      nav.open ul {
-        display: block;
-        margin: 0;
-        padding: 0;
-        text-align: center;
-      }
-
-      nav.open li {
-        display: block;
-        padding: 10px;
-        border-bottom: 1px solid #fff;
-      }
-
-      nav.open li:last-child {
-        border-bottom: none;
-      }
-
-      nav a {
-        color: #fff;
-        font-size: 20px;
-        text-decoration: none;
-        display: block;
-      }
-
-      /* секции */
-      section {
-        padding: 20px;
-      }
-
-      .profile-pic {
-        display: none
-      }
-
-      h2 {
-        font-size: 24px;
-        margin: 0 0 10px;
-      }
-
-      ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
-
-      li {
-        font-size: 18px;
-        line-height: 1.5;
-        margin-bottom: 10px;
-        padding-left: 20px;
-        position: relative;
-      }
-
-      li:before {
-        content: "•";
-        color: #8e8e8e;
-        font-size: 12px;
-        left: 0;
-        position: absolute;
-        top: 6px;
-      }
-    }
-
-    /* стили для планшетов */
-    @media only screen and (min-width: 601px) and (max-width: 960px) {
-      /* заголовок и навигация */
-      header {
-        padding: 20px;
-        background-color: yellow;
-      }
-
-      h1 {
-        font-size: 36px;
-      }
-
-      nav ul {
-        display: block;
-        margin: 0;
-        padding: 0;
-        text-align: center;
-      }
-
-      nav li {
-        display: inline-block;
-        padding: 10px 20px;
-        border-bottom: none;
-
-      }
-
-      /* секции */
-      section {
-        padding: 40px;
-        width: 100%;
-
-      }
-
-      .profile-pic {
-        display: none
-      }
-
-      h2 {
-        font-size: 36px;
-      }
-
-      li {
-        font-size: 24px;
-        line-height: 1.5;
-        margin-bottom: 20px;
-        padding-left: 30px;
-        position: relative;
-      }
-
-      li:before {
-        font-size: 18px;
-        top: 8px;
-      }
-    }
-
-    /* стили для настольных компьютеров */
-    @media only screen and (min-width: 961px) {
-      /* заголовок и навигация */
-      header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px 50px;
-        background: black;
-      }
-
-      .container {
-        /* max-width: 1020px; */
-        /* width: 80%; */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-
-        /* border: black; */
-        box-shadow: black;
-        /* border-radius: 20px; */
-        /* justify-content: flex-start; */
-        margin-top: 5%;
-
-      }
-
-      main {
-        display: inline-flex;
-        background-color: #252525;
-      }
-
-      h1 {
-        font-size: 48px;
-      }
-
-      h3 {
-        margin-top: 20px;
-        font-family: 'Montserrat';
-        font-size: 30px;
-        font-weight: normal;
-        width: 50%;
-      }
-
-      nav ul {
-        display: flex;
-        align-items: center;
-      }
-
-      nav li {
-        border-bottom: none;
-        margin-right: 100px;
-      }
-
-      nav a {
-        font-size: 20px;
-        padding: 10px 20px;
-        border-radius: 20px;
-        color: #fff;
-        background-color: #252525;
-        text-decoration: none;
-      }
-
-      nav a:hover {
-        background-color: #555;
-      }
-
-      /* секции */
-      section {
-        width: 100%;
-        background-color: #252525;
-      }
-
-      h2 {
-        font-size: 48px;
-      }
-
-      li {
-        font-size: 40px;
-        margin-bottom: 30px;
-
-      }
-
-      li:before {
-        font-size: 24px;
-        top: 10px;
-      }
-
-      /* подвал */
-      footer {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        background-color: black;
-        color: #fff;
-        text-align: center;
-        padding: 15px;
-      }
-
-
-      main {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        border-radius: 10px;
-        background: #222222;
-      }
-
-
-      .describe-text li {
-        font-size: 15px;
-        list-style-type: disc;
-        margin: 0;
-      }
-
-      .describe-text-first li {
-        font-size: 15px;
-        list-style-type: disc;
-        margin: 0;
-      }
-
-
-      .a-class a {
-        text-decoration: none;
-        background: none;
-      }
-
-
-      .title-back {
-        background: black;
-        color: white;
-        padding: 20px 40px;
-        margin-left: 110px;
-      }
-
-      header {
-        padding: 0;
-      }
-
-
-      input[type="button"] {
-        color: #fff;
-        background-color: #252525;
-        cursor: pointer;
-        margin-top: 20px;
-        text-decoration: none;
-        list-style-type: none;
-        /* font-weight: bold;*/
-
-        border: 1px solid #252525;
-        border-radius: 20px;
-        font-size: 16px;
-        padding: 10px 75px;
-        width: 100%;
-      }
-
-      input[type="text"], input[type="email"], input[type="submit"], input[type="file"], input[type="button"], textarea {
-        border-radius: 5px;
-        border: 1px solid #000000;
-        font-size: 16px;
-        padding: 10px;
-        width: 100%;
-      }
-
-      input[type="button"] {
-        background-color: yellow;
-        color: #000;
-        cursor: pointer;
-        margin-top: 20px;
-      }
-
-      .title-link {
-        display: flow-root;
-        margin: 70px 150px;
-        width: 100%;
-      }
-
-      .a input[type="button"] {
-        color: #fff;
-        background-color: #333652;
-        cursor: pointer;
-        margin-top: 20px;
-        text-decoration: none;
-        list-style-type: none;
-        /* font-weight: bold;*/
-
-        border: 1px solid #333652;
-        border-radius: 20px;
-        font-size: 16px;
-        padding: 10px 75px;
-        width: 100%;
-      }
-
-      .title-form {
-        font-family: 'Oswald';
-        display: grid;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: lighter;
-      }
-
-      .phone-pic {
-        display: flex;
-        width: 50%;
-      }
-
-      .blog-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .blog-container-pic {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-      }
-
-
-      .footer-pic {
-        margin-left: 25%;
-      }
-
-      .footer-txt {
-        font-size: 20px;
-        margin-left: 10%;
-      }
-
-      .blog-contain {
-        display: grid;
-        justify-content: center;
-        align-items: center;
-        width: 80%;
-        color: white;
-        margin-bottom: 5%;
-
-      }
-
-      .hr-title {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 80%;
-      }
-
-      .textarea-class {
-        height: 500px;
-      }
-
-    }
-
-
-  </style>
 </head>
 <body>
 <header>
@@ -456,7 +36,7 @@
 
     <section>
       <div class="title-form">
-        <h2 class="title-form-text">Mobile Development Blog - Добавить статью</h2>
+        <h2 class="title-form-text">Mobile Development Blog - Редактировать статью</h2>
       </div>
 
     </section>
@@ -477,10 +57,27 @@
         <label for="description">Описание: </label>
         <input type="text" id="description" name="description" placeholder="Описание:" th:value="${blog.getDescription()}">
 
-        <label for="message">Текст статьи:</label>
-        <textarea class="textarea-class" id="message" name="text" placeholder="Текст статьи:" rows="5" cols="25" th:text="${blog.getText()}">
+        <label for="text">Текст статьи:</label>
+        <textarea id="text" name="text" th:text="${blog.getText()}">
 
         </textarea>
+        <script>
+            tinymce.init({
+                selector: '#text',
+                plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags typography inlinecss',
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+                tinycomments_mode: 'embedded',
+                tinycomments_author: 'Author name',
+                mergetags_list: [
+                    { value: 'First.Name', title: 'First Name' },
+                    { value: 'Email', title: 'Email' },
+                ],
+                ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+
+            });
+        </script>
+
+
 
         <input type="submit" value="Send">
 

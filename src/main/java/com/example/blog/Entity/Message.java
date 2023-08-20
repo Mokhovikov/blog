@@ -27,4 +27,6 @@ public class Message {
 
     @Column
     private String message;
+
+    @Column String photo;
 }
